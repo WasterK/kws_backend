@@ -52,15 +52,25 @@ class DatabaseAccess:
             return False
 
     def get_all_users(self):
-            try:
-                query = "SELECT * FROM users"
-                self.cur.execute(query)
-                users = self.cur.fetchall()
-                return users
-            except psycopg2.Error as e:
-                print(f"Error getting all users: {e}")
-                return None
+        try:
+            query = "SELECT * FROM users"
+            self.cur.execute(query)
+            users = self.cur.fetchall()
+            return users
+        except psycopg2.Error as e:
+            print(f"Error getting all users: {e}")
+            return None
             
+
+    def get_all_cable_info(self, deviceId):
+        try:
+            query = f"SELECT * FROM cable_info WHERE device_id = {deviceId}"
+            self.cur.execute(query)
+            cableInfo = self.cur.fetchall()
+            return cableInfo
+        except psycopg2.Error as e:
+            print(f"Error getting cable info of Device Id {deviceId}")
+
 # databaseURL = "postgres://admin:kRz8psM99PcqnOGLHQaY4GU0UXPs2ldC@dpg-cmco2d6d3nmc73ddamdg-a.singapore-postgres.render.com/kalpwebservice"    
 # db = DatabaseAccess(databaseURL)
 # db.create_table("users")
