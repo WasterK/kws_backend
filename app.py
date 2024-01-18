@@ -1,4 +1,5 @@
 from flask import Flask, request, flash, jsonify
+from flask.views import MethodView
 from Database_Access import DatabaseAccess
 
 app = Flask(__name__)
@@ -18,8 +19,7 @@ def login():
     password = data.get('password')
     if db.user_validation(username=username,password=password):
         return jsonify({'msg': "Login successful!", "status": "success"}), 200
-    else:
-        return jsonify({"msg": "Login failed. Check your credentials and try again.", "status": "fail"}), 401
+    return jsonify({"msg": "Login failed. Check your credentials and try again.", "status": "fail"}), 401
     
 @app.route('/get-cable-info/<int:deviceId>', methods=['GET'])
 def get_cable_info(deviceId):
@@ -27,7 +27,12 @@ def get_cable_info(deviceId):
         cableInfo = db.get_all_cable_info(deviceId=deviceId)
         return jsonify({"device Id": deviceId, "cable info": cableInfo}), 200
     except Exception as e:
-        return jsonify({"device Id": deviceId, "cable info": "somthing went wrong"}), 404
+        return jsonify({"device Id": deviceId, "cable info": f"somthing went wrong: {e}"}), 404
+    
+@app.route("/get-all-devices", methods=["GET"])
+def get_all_device():
+    deviceId = db.get_all_devices()
+    return jsonify({"device ids" : deviceId})
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -66,13 +66,26 @@ class DatabaseAccess:
         try:
             query = f"SELECT * FROM cable_info WHERE device_id = {deviceId}"
             self.cur.execute(query)
-            cableInfo = self.cur.fetchall()
-            return cableInfo
+            data = self.cur.fetchall()
+            if data != []:
+                return {
+                    "Part Location": data[0][0],
+                    "Pass Count": data[0][1],
+                    "Fail Count": data[0][3],
+                    "Last Update": data[0][2]
+                }
+            return {
+                "msg": "Device not found"
+            }
         except psycopg2.Error as e:
-            print(f"Error getting cable info of Device Id {deviceId}")
+            return {"msg": f"Error getting cable info", "Device ID": deviceId}
 
-# databaseURL = "postgres://admin:kRz8psM99PcqnOGLHQaY4GU0UXPs2ldC@dpg-cmco2d6d3nmc73ddamdg-a.singapore-postgres.render.com/kalpwebservice"    
-# db = DatabaseAccess(databaseURL)
-# db.create_table("users")
-# db.insert_user_details("Kiran", "Kiran@123")
-
+    def get_all_devices(self):
+        try:
+            query = "SELECT device_id FROM cable_info"
+            self.cur.execute(query)
+            output = self.cur.fetchall()
+            return [x[0] for x in output]
+        
+        except psycopg2.Error as e:
+            return f"Error getting device id's, Error: {e}"
