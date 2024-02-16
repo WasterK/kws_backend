@@ -1,8 +1,11 @@
 from flask import Flask, request, flash, jsonify
 from flask.views import MethodView
 from Database_Access import DatabaseAccess
+from flask_cors import CORS
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 databaseURL = "postgres://admin:kRz8psM99PcqnOGLHQaY4GU0UXPs2ldC@dpg-cmco2d6d3nmc73ddamdg-a.singapore-postgres.render.com/kalpwebservice"
 db = DatabaseAccess(databaseURL)
