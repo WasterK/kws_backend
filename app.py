@@ -22,7 +22,7 @@ def login():
     password = data.get('password')
     if db.user_validation(username=username,password=password):
         return jsonify({'msg': "Login successful!", "status": "success"}), 200
-    return jsonify({"msg": "Login failed. Check your credentials and try again.", "status": "fail"}), 401
+    return jsonify({"msg": "Login failed. Check your credentials and try again.", "status": "fail"}), 200
     
 @app.route('/get-cable-info/<int:deviceId>', methods=['GET'])
 def get_cable_info(deviceId):
